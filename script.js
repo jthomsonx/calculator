@@ -8,6 +8,7 @@ var storeArray = 0; // First string created from tempArray
 var tempOperator = ""; // Operator as chosen on click
 var secondArray; // Second string created from tempArray when 'equals' clicked
 var answer;
+var previousOperator = false;
 
 // Function to clear the display and all stored values
 function allClear() {
@@ -18,6 +19,7 @@ function allClear() {
 		secondArray = 0;
 		answer = 0;
 		display.textContent = 0;
+		previousOperator = false;
 	});
 };
 allClear();
@@ -34,14 +36,18 @@ numbers.forEach(updateDisplay);
 // Function to store initial value, operator chosen & reset temp Array.
 function storeOperator(op) {
 	op.addEventListener("click", function() {
+		tempOperator = op.value;
 		if (storeArray == 0) {
 			storeArray = parseInt(tempArray.join(''));
 		}	
+		if (previousOperator == true) {
+			secondArray = parseInt(tempArray.join(''));
+			operate(tempOperator, storeArray, secondArray);
+			display.textContent = answer;
+			storeArray = answer;
+		}
 		tempArray = [];
-		tempOperator = op.value;			
-		console.log(storeArray);
-		console.log(tempArray);
-		console.log(tempOperator);
+		previousOperator = true;			
 	});
 };
 operators.forEach(storeOperator);
@@ -50,10 +56,10 @@ operators.forEach(storeOperator);
 function computeAnswer() {
 	equals.addEventListener("click", function() {
 		secondArray = parseInt(tempArray.join(''));
-		console.log(secondArray);
-		console.log(operate(tempOperator, storeArray, secondArray));
+		operate(tempOperator, storeArray, secondArray);
 		display.textContent = answer;
 		storeArray = answer; // on completion of equals, store result as first string
+		previousOperator = false;
 	});
 };
 computeAnswer();
@@ -65,9 +71,6 @@ function multiply(a, b) { return a * b};
 function divide(a, b) { return a / b};
 
 function operate(operator, x, y) {
-	console.log(operator);
-	console.log(x);
-	console.log(y);
 	if (operator == "add") {
 		answer = add(x, y);
 	} else if (operator == "subtract") {
