@@ -3,6 +3,7 @@ const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 const equals = document.getElementById('equals');
 const clear = document.getElementById('clear');
+const point = document.getElementById('point');
 var tempArray = [];
 var storeArray = 0; // First string created from tempArray
 var tempOperator = ""; // Operator as chosen on click
@@ -33,10 +34,22 @@ function updateDisplay(num) {
 };
 numbers.forEach(updateDisplay);
 
+// Function to add a decimal point, but only one.
+function decimalAdd() {
+	point.addEventListener("click", function() {
+		if (tempArray.includes(".") == false) {
+			tempArray.push(point.value);
+			display.textContent = tempArray.join('');
+		}
+	})
+};
+decimalAdd();
+
+
 // Function to store initial value, operator chosen & reset temp Array.
 function storeOperator(op) {
 	op.addEventListener("click", function() {
-		tempOperator = op.value;
+
 		if (storeArray == 0) {
 			storeArray = parseInt(tempArray.join(''));
 		}	
@@ -46,6 +59,7 @@ function storeOperator(op) {
 			display.textContent = answer;
 			storeArray = answer;
 		}
+		tempOperator = op.value;		
 		tempArray = [];
 		previousOperator = true;			
 	});
